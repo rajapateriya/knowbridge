@@ -33,3 +33,6 @@ vector_db/
 
 # App outputs (generated)
 outputs/
+
+# Local submission writeup (keep out of git)
+Submission.md
