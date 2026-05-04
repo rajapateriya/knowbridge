@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680">
+  <defs>
+    <style>
+      .title { font: 700 26px -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Arial, sans-serif; fill: #111; }
+      .subtitle { font: 500 14px -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Arial, sans-serif; fill: #444; }
+      .label { font: 700 16px -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Arial, sans-serif; fill: #111; }
+      .small { font: 500 13px -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Arial, sans-serif; fill: #333; }
+      .box { fill: #fff; stroke: #111; stroke-width: 2; rx: 14; }
+      .group { fill: #f7f7f7; stroke: #999; stroke-width: 2; rx: 18; }
+      .arrow { stroke: #111; stroke-width: 2.5; fill: none; marker-end: url(#arrowHead); }
+      .dashed { stroke-dasharray: 7 6; }
+    </style>
+    <marker id="arrowHead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#111" />
+    </marker>
+  </defs>
+
+  <text x="40" y="52" class="title">KnowBridge — High-Level Architecture (HLD)</text>
+  <text x="40" y="80" class="subtitle">Major components and end-to-end data flow (indexing + chat)</text>
+
+  <!-- Left: User + Browser -->
+  <rect x="60" y="140" width="260" height="120" class="box" />
+  <text x="85" y="175" class="label">User</text>
+  <text x="85" y="202" class="small">Uploads knowledge docs</text>
+  <text x="85" y="224" class="small">Asks questions in chat</text>
+
+  <rect x="60" y="300" width="260" height="120" class="box" />
+  <text x="85" y="335" class="label">Web UI</text>
+  <text x="85" y="362" class="small">Gradio application</text>
+  <text x="85" y="384" class="small">Knowledge Base + Chat tabs</text>
+
+  <!-- Center: KnowBridge Service -->
+  <rect x="360" y="120" width="480" height="520" class="group" />
+  <text x="385" y="152" class="label">KnowBridge Application (Python)</text>
+  <text x="385" y="178" class="small">Core modules: app.py, document_indexer.py, rag_pipeline.py</text>
+
+  <rect x="395" y="220" width="410" height="110" class="box" />
+  <text x="420" y="254" class="label">Indexing / Upsert</text>
+  <text x="420" y="282" class="small">hash → chunk → embed → store</text>
+
+  <rect x="395" y="360" width="410" height="110" class="box" />
+  <text x="420" y="394" class="label">Retrieval</text>
+  <text x="420" y="422" class="small">embed query → top-k similarity search</text>
+
+  <rect x="395" y="500" width="410" height="110" class="box" />
+  <text x="420" y="534" class="label">Grounded Generation</text>
+  <text x="420" y="562" class="small">prompt + SOURCES → LLM response</text>
+
+  <!-- Right: External systems -->
+  <rect x="880" y="140" width="280" height="120" class="box" />
+  <text x="905" y="175" class="label">Vector Store</text>
+  <text x="905" y="202" class="small">ChromaDB (persistent)</text>
+  <text x="905" y="224" class="small">outputs/vector_db</text>
+
+  <rect x="880" y="300" width="280" height="120" class="box" />
+  <text x="905" y="335" class="label">LLM Provider</text>
+  <text x="905" y="362" class="small">Groq via LangChain</text>
+  <text x="905" y="384" class="small">llama-3.1-8b-instant</text>
+
+  <rect x="880" y="460" width="280" height="120" class="box" />
+  <text x="905" y="495" class="label">Conversation Store</text>
+  <text x="905" y="522" class="small">SQLite history + summary</text>
+  <text x="905" y="544" class="small">outputs/chat_history.db</text>
+
+  <!-- Config -->
+  <rect x="60" y="460" width="260" height="120" class="box" />
+  <text x="85" y="495" class="label">Configuration</text>
+  <text x="85" y="522" class="small">config.yaml / prompt_config.yaml</text>
+  <text x="85" y="544" class="small">top-k, threshold, prompts</text>
+
+  <!-- Arrows: user to UI -->
+  <path class="arrow" d="M 190 260 L 190 300" />
+
+  <!-- UI to App -->
+  <path class="arrow" d="M 320 360 L 360 360" />
+
+  <!-- Config to App (dashed) -->
+  <path class="arrow dashed" d="M 320 520 C 360 520, 360 520, 385 520" />
+
+  <!-- Indexing to Vector store -->
+  <path class="arrow" d="M 805 275 L 880 200" />
+
+  <!-- Retrieval to Vector store -->
+  <path class="arrow" d="M 805 415 L 880 200" />
+
+  <!-- Generation to LLM provider -->
+  <path class="arrow" d="M 805 555 L 880 360" />
+
+  <!-- App to Conversation store -->
+  <path class="arrow" d="M 840 420 L 880 520" />
+
+  <!-- Conversation store back to App (context) -->
+  <path class="arrow dashed" d="M 880 520 C 820 520, 760 520, 805 520" />
+
+  <!-- Notes -->
+  <text x="360" y="635" class="subtitle">Solid arrows: primary data flow. Dashed arrows: configuration / context loading.</text>
+</svg>
