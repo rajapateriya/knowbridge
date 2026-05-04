@@ -1,6 +1,6 @@
 # KnowBridge — RAG-Powered Knowledge Assistant
 
-KnowBridge is a lightweight **Retrieval-Augmented Generation (RAG)** app that turns a set of Markdown documents into a grounded, searchable knowledge assistant.
+KnowBridge is a lightweight **Retrieval-Augmented Generation (RAG)** app that turns a set of documents into a grounded, searchable knowledge assistant.
 
 It provides:
 - A **Gradio Web UI** to upload and index `.md` and `.docx` files
