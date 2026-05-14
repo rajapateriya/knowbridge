@@ -3,13 +3,27 @@
 KnowBridge is a lightweight **Retrieval-Augmented Generation (RAG)** app that turns a set of documents into a grounded, searchable knowledge assistant.
 
 It provides:
-- A **Gradio Web UI** to upload and index `.md` and `.docx` files
+- A **Gradio Web UI** to upload and index `.md`, `.docx`, and `.doc` files
 - **Persistent ChromaDB** vector storage (no re-embedding every run)
 - **Semantic retrieval + grounded answering** using a Groq-hosted LLM
 - **Session-based chat persistence** (SQLite) with rolling summarization for long chats
 
+## Project scope
+
+KnowBridge is designed to work with user-supplied document collections across domains rather than being tied to a single business function.
+
+Supported usage:
+- Upload `.md`, `.docx`, or `.doc` files
+- Ask factual, procedural, or follow-up questions answerable from those documents
+- Receive grounded answers with a `SOURCES:` line for traceability
+
+Out of scope:
+- Questions requiring external knowledge not present in the uploaded documents
+- Live data lookups from external systems
+- Formal benchmark-grade retrieval evaluation in the current version
+
 ## How it works (brief)
-1. Upload `.md` or `.docx` files in the **Knowledge Base** tab.
+1. Upload `.md`, `.docx`, or `.doc` files in the **Knowledge Base** tab.
 2. The app **hashes** each file and only re-indexes files that changed.
 3. Documents are **chunked**, embedded with a sentence-transformer model, and stored in **ChromaDB**.
 4. In the **Chat** tab, your question is embedded, relevant chunks are retrieved, and the LLM answers using only retrieved context.
@@ -18,7 +32,9 @@ It provides:
 ## Requirements
 
 ### Software
-- Python 3.10+ recommended (works with modern Python versions)
+- Python 3.11 recommended
+
+Note: Some dependencies (ChromaDB / PyTorch / sentence-transformers) may not have wheels for very new Python versions yet (e.g. 3.14). If your `python3` is too new, use `python3.11`.
 
 ### Python libraries
 Install all dependencies from this folder’s requirements file:
@@ -45,11 +61,11 @@ Get a key from: https://console.groq.com/
 From the `rag-knowledge-assistant/` directory:
 
 ```bash
-python3 -m venv .venv
+python3.11 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-python3 code/app.py
+python code/app.py
 ```
 
 Then open the local Gradio URL printed in the terminal (typically `http://127.0.0.1:7860`).
@@ -71,8 +87,8 @@ Common knobs:
 - Chat history persisted to: `outputs/chat_history.db`
 
 ## Notes
-- The UI currently supports indexing `.md` and `.docx`.
-- Legacy `.doc` (older Word format) is not supported out of the box — convert to `.docx` first.
+- The UI supports indexing `.md`, `.docx`, and `.doc`.
+- For `.doc`, the app will try to extract text from Confluence/Atlassian export formats (MIME-wrapped HTML) first, then fall back to macOS `textutil` or LibreOffice (`soffice`) conversion.
 - If retrieval returns no chunks under the threshold, the pipeline falls back to returning the top-k results to avoid empty context.
 
 ## License & attribution
